@@ -2,6 +2,7 @@ package org.ssglobal.training.codes.itemC;
 
 import java.util.AbstractList;
 import java.util.Collection;
+import java.util.Random;
 
 public class RandomList<E> extends AbstractList<E> {
 
@@ -46,32 +47,33 @@ public class RandomList<E> extends AbstractList<E> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void add(int index, E element) throws IndexOutOfBoundsException, NegativeArraySizeException {
-		if (index > elementData.length) {
-			throw new IndexOutOfBoundsException();
-		}
+	public boolean add(E element) {
+		Random random = new Random();
+	    int randomNumber = random.nextInt(elementData.length + 1);
+		
+		try {
+			E[] temp = (E[]) new Object[elementData.length + 1];
 
-		if (index < 0) {
-			throw new NegativeArraySizeException();
+			if (elementData.length > 0 && randomNumber == 0) {
+				System.arraycopy(elementData, 0, temp, randomNumber + 1, elementData.length - randomNumber);
+				temp[randomNumber] = element;
+			} else if (elementData.length > 0 && randomNumber == elementData.length) {
+				System.arraycopy(elementData, 0, temp, 0, elementData.length);
+				temp[randomNumber] = element;
+			} else if (elementData.length > 0) {
+				System.arraycopy(elementData, 0, temp, 0, randomNumber);
+				temp[randomNumber] = element;
+				System.arraycopy(elementData, randomNumber, temp, randomNumber + 1, elementData.length - randomNumber);
+			} else {
+				temp[randomNumber] = element;
+			}
+			elementData = temp;
+			temp = null;
+			return true;
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
 		}
-
-		E[] temp = (E[]) new Object[elementData.length + 1];
-
-		if (elementData.length > 0 && index == 0) {
-			System.arraycopy(elementData, 0, temp, index + 1, elementData.length - index);
-			temp[index] = element;
-		} else if (elementData.length > 0 && index == elementData.length) {
-			System.arraycopy(elementData, 0, temp, 0, elementData.length);
-			temp[index] = element;
-		} else if (elementData.length > 0) {
-			System.arraycopy(elementData, 0, temp, 0, index);
-			temp[index] = element;
-			System.arraycopy(elementData, index, temp, index + 1, elementData.length - index);
-		} else {
-			temp[index] = element;
-		}
-		elementData = temp;
-		temp = null;
+		return false;
 	}
 
 	@SuppressWarnings("unchecked")
