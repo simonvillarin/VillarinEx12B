@@ -8,9 +8,12 @@ public class TestRandomList {
 		randomList.add("James");
 		randomList.add("Hatamosa");
 		randomList.add("Villarin");
+		randomList.add("Villarin");
 		
 		System.out.println(randomList);
 		System.out.println(randomList.remove(1));
+		System.out.println(randomList);
+		randomList.remove("Villarin");
 		System.out.println(randomList);
 
 	}
